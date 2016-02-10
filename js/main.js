@@ -1,6 +1,8 @@
 var map = null;
 var map_revision = "r6";
 
+var layers = [];
+
 window.onload = function(){
   map = L.map("map").setView([0, 0], 3);
 
@@ -13,4 +15,18 @@ window.onload = function(){
     continuousWorld: true,
     crs: L.CRS.Simple
   }).addTo(map);
+
+  addGeoJSON(getFromURL("assets/" + map_revision + "/features/settlements.geojson"));
+}
+
+function addGeoJSON(encoded){
+  decoded = JSON.parse(encoded);
+  L.geoJson(decoded).addTo(map);
+}
+
+function getFromURL(url){
+  req = new XMLHttpRequest();
+  req.overrideMimeType("application/json");
+  req.open("GET", url);
+  req.send();
 }
