@@ -19,8 +19,7 @@ window.onload = function(){
   getFromURL("assets/" + map_revision + "/features/settlements.geojson", addGeoJSON);
 }
 
-function addGeoJSON(){
-  encoded = this.responseText;
+function addGeoJSON(encoded){
   console.log(encoded);
   decoded = JSON.parse(encoded);
   L.geoJson(decoded).addTo(map);
@@ -30,9 +29,13 @@ function getFromURL(url, callback){
   req = new XMLHttpRequest();
   req.overrideMimeType("application/json");
   req.open("GET", url);
+  req.onreadystatechange = function(){
+    if(req.readyState == 4 && req.status == 200){
+      callback(req.responseText);
+    }
+  }
   req.onerror = function(){
     console.error(this.statusText);
   };
-  req.callback = callback;
   req.send();
 }
