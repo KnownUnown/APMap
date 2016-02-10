@@ -30,4 +30,5 @@ function getFromURL(url){
   req.overrideMimeType("application/json");
   req.open("GET", url);
   req.send();
+  return req.responseText;
 }
