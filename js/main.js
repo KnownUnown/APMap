@@ -16,19 +16,23 @@ window.onload = function(){
     crs: L.CRS.Simple
   }).addTo(map);
 
-  addGeoJSON(getFromURL("assets/" + map_revision + "/features/settlements.geojson"));
+  getFromURL("assets/" + map_revision + "/features/settlements.geojson", addGeoJSON);
 }
 
-function addGeoJSON(encoded){
+function addGeoJSON(){
+  encoded = this.responseText;
   console.log(encoded);
   decoded = JSON.parse(encoded);
   L.geoJson(decoded).addTo(map);
 }
 
-function getFromURL(url){
+function getFromURL(url, callback){
   req = new XMLHttpRequest();
   req.overrideMimeType("application/json");
   req.open("GET", url);
+  req.onerror = function(){
+    console.error(this.statusText);
+  };
+  req.callback = callback;
   req.send();
-  return req.responseText;
 }
