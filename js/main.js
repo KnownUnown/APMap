@@ -20,6 +20,7 @@ window.onload = function(){
 }
 
 function addGeoJSON(encoded){
+  console.log(encoded);
   decoded = JSON.parse(encoded);
   L.geoJson(decoded).addTo(map);
 }
