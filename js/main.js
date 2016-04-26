@@ -6,13 +6,17 @@ var layers = [];
 window.onload = function(){
   map = L.map("map").setView([0, 0], 3);
 
-  L.tileLayer("assets/{revision}/map_full/{z}/{x}/{y}.png", {
+  L.tileLayer("assets/{revision}/map/{z}/{x}/{y}.png", {
     revision: map_revision,
     attribution: "Map data courtesy of <a href=\"http://minecraftairshippirates.enjin.com/profile/1310042\">Miss Fortune</a>",
     minZoom: 1,
     maxZoom: 6,
     tms: true,
     continuousWorld: true,
+    bounds: L.latLngBounds(
+      map.unproject([0, 16384]),
+      map.unproject([16384, 0])
+    ),
     crs: L.CRS.Simple
   }).addTo(map);
 
@@ -21,8 +25,22 @@ window.onload = function(){
 
 function addGeoJSON(encoded){
   console.log(encoded);
-  decoded = JSON.parse(encoded);
-  L.geoJson(decoded).addTo(map);
+  for(var key in encoded["features"]) {
+    console.log(encoded["features"][key]);
+    latlng = map.unproject(encoded["features"][key].geometry.coordinates, map.getMaxZoom());
+    lat = latlng.lat;
+    lng = latlng.lng;
+    encoded["features"][key].geometry.coordinates = [lng, lat]; // wince
+  }
+  console.log(encoded);
+  geoJson = L.geoJson(encoded, {
+    onEachFeature: function(feature, layer) {
+      if (feature.properties && feature.properties.name) {
+        layer.bindPopup(feature.properties.name);
+      }
+    }
+  });
+  geoJson.addTo(map);
 }
 
 function getFromURL(url, callback){
@@ -31,11 +49,11 @@ function getFromURL(url, callback){
   req.open("GET", url);
   req.onreadystatechange = function(){
     if(req.readyState == 4 && req.status == 200){
-      callback(req.responseText);
+      callback(JSON.parse(req.responseText));
     }
   }
   req.onerror = function(){
-    console.error(this.statusText);
+    console.error(req.statusText);
   };
   req.send();
 }
