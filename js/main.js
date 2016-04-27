@@ -4,7 +4,7 @@ var map_revision = "r6";
 var layers = [];
 
 window.onload = function(){
-  map = L.map("map").setView([0, 0], 3);
+  map = L.map("map").setView([0, 0], 1);
 
   L.tileLayer("assets/{revision}/map/{z}/{x}/{y}.png", {
     revision: map_revision,
@@ -52,13 +52,20 @@ function addGeoJSON(encoded){
     onEachFeature: function(feature, layer) {
         var coords = feature.properties.coordinates;
         layer.bindPopup("Coordinates: X " + coords[0] + ", Y " + coords[1]);
+        layer.on('mouseover', function (e) {
+          this.openPopup();
+        });
+
+        layer.on('mouseout', function (e) {
+          this.closePopup();
+        });
     }
   });
   geoJson.addTo(map);
 }
 
 function getFromURL(url, callback){
-  req = new XMLHttpRequest();
+  var req = new XMLHttpRequest();
   req.overrideMimeType("application/json");
   req.open("GET", url);
   req.onreadystatechange = function(){

@@ -9,6 +9,7 @@
   color: rgba(0, 0, 0, 0.7);
   text-shadow: 0 0 0.1px white;
   text-align: center;
+  white-space: nowrap;
 }
 
 .map-label div {
