@@ -3,3 +3,15 @@
   height: 100%;
   margin: auto;
 }
+
+.map-label {
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.7);
+  text-shadow: 0 0 0.1px white;
+  text-align: center;
+}
+
+.map-label div {
+  position: relative;
+  left: -50%;
+}

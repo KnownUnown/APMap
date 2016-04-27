@@ -20,24 +20,38 @@ window.onload = function(){
     crs: L.CRS.Simple
   }).addTo(map);
 
+  L.control.coordinates({
+    position: "bottomleft",
+    decimals: 0,
+    enableUserInput: false,
+    customLabelFcn: function(latlng, opt) {
+      xy = map.project(latlng, map.getMaxZoom());
+      return "X: " + xy.x + " Y: " + xy.y;
+    }
+  }).addTo(map);
+
   getFromURL("assets/" + map_revision + "/features/settlements.geojson", addGeoJSON);
 }
 
 function addGeoJSON(encoded){
-  console.log(encoded);
   for(var key in encoded["features"]) {
-    console.log(encoded["features"][key]);
-    latlng = map.unproject(encoded["features"][key].geometry.coordinates, map.getMaxZoom());
-    lat = latlng.lat;
-    lng = latlng.lng;
-    encoded["features"][key].geometry.coordinates = [lng, lat]; // wince
+    encoded["features"][key].properties.coordinates = encoded["features"][key].geometry.coordinates;
+    var latlng = map.unproject(encoded["features"][key].geometry.coordinates, map.getMaxZoom());
+    encoded["features"][key].geometry.coordinates = [latlng.lng, latlng.lat]; // wince
   }
-  console.log(encoded);
-  geoJson = L.geoJson(encoded, {
+  var geoJson = L.geoJson(encoded, {
+    pointToLayer: function(feature, latlng) {
+      return L.marker(latlng, {
+        icon: L.divIcon({
+          iconSize: null,
+          className: "map-label",
+          html: "<div>" + feature.properties.name + "</div"
+        })
+      });
+    },
     onEachFeature: function(feature, layer) {
-      if (feature.properties && feature.properties.name) {
-        layer.bindPopup(feature.properties.name);
-      }
+        var coords = feature.properties.coordinates;
+        layer.bindPopup("Coordinates: X " + coords[0] + ", Y " + coords[1]);
     }
   });
   geoJson.addTo(map);
