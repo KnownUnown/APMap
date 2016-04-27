@@ -22,11 +22,10 @@ window.onload = function(){
 
   L.control.coordinates({
     position: "bottomleft",
-    decimals: 0,
     enableUserInput: false,
     customLabelFcn: function(latlng, opt) {
       xy = map.project(latlng, map.getMaxZoom());
-      return "X: " + xy.x + " Y: " + xy.y;
+      return "X: " + Math.round(xy.x) + " Y: " + Math.round(xy.y);
     }
   }).addTo(map);
 
