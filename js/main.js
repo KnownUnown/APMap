@@ -68,15 +68,16 @@ function addGeoJSON(encoded) {
                 icon: L.divIcon({
                     iconSize: null,
                     className: "map-label",
-                    html: "<div>" + feature.properties.name + "</div"
+                    html: "<div>" + feature.properties.name + "</div>"
                 })
             }).on("click", function(e) {
                 $("#cityModal .modal-title").text(feature.properties.name);
                 $("#cityModal .modal-body p span").text("Not set yet :(");
                 if (feature.properties.lore != null) {
                     $("#cityModal .modal-body #faction span").html(feature.properties.faction);
-                    $("#cityModal .modal-body #type span").html(feature.properties.type);
+                    $("#cityModal .modal-body #type span").html(feature.properties.desc);
                     $("#cityModal .modal-body #lore span").html(feature.properties.lore);
+                    $("#cityModal .modal-body #source span").html(feature.properties.source)
                 }
                 $("#cityModal").modal();
             });
