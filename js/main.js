@@ -4,6 +4,26 @@ var map_revision = "r6";
 var doodles = null;
 
 $(document).ready(function() {
+    // init clipboard.js
+    var clipboard = new Clipboard(".btn");
+
+    $(".btn").mouseleave(function(e){
+        $(this).tooltip("disable");
+    });
+    clipboard.on("success", function(e){
+        $(e.trigger).tooltip({
+            title: "Copied!"
+        });
+        $(e.trigger).tooltip("enable");
+        $(e.trigger).attr("title", "Copied!").tooltip("fixTitle").tooltip("show");
+    });
+
+    clipboard.on("error", function(e){
+        $(e.trigger).tooltip("enable");
+        $(e.trigger).attr("title", fallbackMessage(e.action)).tooltip("fixTitle").tooltip("show"); //TODO: fix weird tooltip positioning
+    });
+
+    // init map elements
     map = L.map("map", {
         measureControl: true
     }).setView([0, 0], 1);
@@ -68,29 +88,28 @@ function addGeoJSON(encoded) {
                 icon: L.divIcon({
                     iconSize: null,
                     className: "map-label",
-                    html: "<div>" + feature.properties.name + "</div>"
+                    html: feature.properties.name
                 })
             }).on("click", function(e) {
                 $("#cityModal .modal-title").text(feature.properties.name);
-                $("#cityModal .modal-body p span").text("Not set yet :(");
+                $("#cityModal #coords").attr("value", "[" + feature.properties.coordinates.join(", ") + "]");
+                $("#modal-content > span").text("Not set yet :(");
                 if (feature.properties.lore != null) {
-                    $("#cityModal .modal-body #faction span").html(feature.properties.faction);
-                    $("#cityModal .modal-body #type span").html(feature.properties.desc);
-                    $("#cityModal .modal-body #lore span").html(feature.properties.lore);
-                    $("#cityModal .modal-body #source span").html(feature.properties.source)
+                    $("#faction").html(feature.properties.faction);
+                    $("#lore").html(feature.properties.lore);
+                    $("#source").html(feature.properties.source)
                 }
                 $("#cityModal").modal();
             });
         },
         onEachFeature: function(feature, layer) {
-            var coords = feature.properties.coordinates;
-            layer.bindPopup(coords[0] + ", " + coords[1]);
+            var coords = "[" + feature.properties.coordinates.join(", ") + "]"; // TODO: refactor
             layer.on('mouseover', function(e) {
-                this.openPopup();
+                $("div .leaflet-marker-icon:contains('" + feature.properties.name + "')").text(coords);
             });
 
             layer.on('mouseout', function(e) {
-                this.closePopup();
+                $("div .leaflet-marker-icon:contains('" + coords + "')").text(feature.properties.name);
             });
         }
     });
@@ -110,4 +129,17 @@ function getFromURL(url, callback) {
         console.error(req.statusText);
     };
     req.send();
+}
+
+function fallbackMessage(action) {
+    var actionMsg = '';
+    var actionKey = (action === 'cut' ? 'X' : 'C');
+    if (/iPhone|iPad/i.test(navigator.userAgent)) {
+        actionMsg = 'No support :(';
+    } else if (/Mac/i.test(navigator.userAgent)) {
+        actionMsg = 'Press ⌘-' + actionKey + ' to ' + action;
+    } else {
+        actionMsg = 'Press Ctrl-' + actionKey + ' to ' + action;
+    }
+    return actionMsg;
 }

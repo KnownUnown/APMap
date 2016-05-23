@@ -19,25 +19,37 @@
   <body>
     <div id="map"></div>
     <div class="modal fade" tabindex="-1" role="dialog" id="cityModal">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            <div class="input-group input-group-sm" style="float: right; width: 40%;">
+                <input type="text" class="form-control" id="coords" />
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" data-clipboard-target="#coords">
+                        <i class="fa fa-clipboard"></i>
+                    </button>
+                </span>
+            </div>
             <h4 class="modal-title"></h4>
           </div>
-          <div class="modal-body">
-            <p id="faction">
-                <strong>Faction:</strong> <span></span>
-            </p>
-            <p id="type">
-                <strong>Description:</strong> <span></span>
-            </p>
-            <p id="lore">
-                <strong>Lore:</strong> <span></span>
-            </p>
-            <p id="source">
-                <strong>Source Of: </strong><span></span>
-            </p>
+          <div class="modal-body row">
+            <div class="col-md-8">
+                <div id="modal-content">
+                    <i class="fa fa-fw fa-flag"></i>
+                    <span id="faction"></span>
+                </div>
+                <div id="modal-content">
+                    <i class="fa fa-fw fa-bars"></i>
+                    <span id="lore"></span>
+                </div>
+                <div id="modal-content">
+                    <i class="fa fa-fw fa-plane"></i>
+                    <span id="source"></span>
+                </div>
+            </div>
+            <div class="col-mod-4" style="padding: 50px 50px 50px 50px;">
+                There should be an image here, but it's not implemented yet. :(
+            </div>
           </div>
           <div class="modal-footer">
 
@@ -49,6 +61,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.10/clipboard.min.js"></script>
     <script src="https://cdn.rawgit.com/MrMufflon/Leaflet.Coordinates/master/dist/Leaflet.Coordinates-0.1.5.min.js"></script>
     <script src="https://cdn.rawgit.com/Leaflet/Leaflet.draw/master/dist/leaflet.draw.js"></script>
     <script src="https://cdn.rawgit.com/makinacorpus/Leaflet.MeasureControl/gh-pages/leaflet.measurecontrol.js"></script>
