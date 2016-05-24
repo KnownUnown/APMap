@@ -93,7 +93,7 @@ function addGeoJSON(encoded) {
             }).on("click", function(e) {
                 $("#cityModal .modal-title").text(feature.properties.name);
                 $("#cityModal #coords").attr("value", "[" + feature.properties.coordinates.join(", ") + "]");
-                $("#modal-content > span").text("Not set yet :(");
+                $("#lore, #source, #faction").text("Not set yet :(");
                 if (feature.properties.lore != null) {
                     $("#faction").html(feature.properties.faction);
                     $("#lore").html(feature.properties.lore);
