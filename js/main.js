@@ -2,6 +2,7 @@ var map = null;
 var map_revision = "r6";
 
 var doodles = null;
+var storageSupported = true;
 
 $(document).ready(function() {
     // init clipboard.js
@@ -28,23 +29,36 @@ $(document).ready(function() {
         measureControl: true
     }).setView([0, 0], 1);
 
-    doodles = L.featureGroup().addTo(map);
+    // init base tile layer
     L.tileLayer("assets/{revision}/map/{z}/{x}/{y}.png", {
         revision: map_revision,
         attribution: "Map data courtesy of <a href=\"http://minecraftairshippirates.enjin.com/profile/1310042\">Miss Fortune</a>",
         minZoom: 1,
         maxZoom: 6,
         tms: true,
-        /*
-        bounds: L.latLngBounds(
-          map.unproject([0, 16384], map.getMaxZoom()),
-          map.unproject([16384, 0], map.getMaxZoom())
-        ),
-        */
         continuousWorld: true,
         crs: L.CRS.Simple
     }).addTo(map);
 
+    // init custom layers
+
+    if(!Storage){
+        console.error("LocalStorage not supported!");
+        storageSupported = false;
+        doodles = L.featureGroup().addTo(map);
+    } else {
+        doodles = getDrawn().addTo(map);
+    }
+    map.on('draw:created', function(e) {
+        doodles.addLayer(e.layer);
+        if(storageSupported){
+            saveDrawn(JSON.stringify(doodles.toGeoJSON()));
+        }
+    });
+
+    getFromURL("assets/" + map_revision + "/features/settlements.geojson", addGeoJSON);
+
+    // init controls
     L.control.coordinates({
         position: "bottomleft",
         enableUserInput: false,
@@ -67,13 +81,6 @@ $(document).ready(function() {
             }
         }
     }).addTo(map);
-
-    map.on('draw:created', function(e) {
-        layer = e.layer;
-        doodles.addLayer(layer);
-    });
-
-    getFromURL("assets/" + map_revision + "/features/settlements.geojson", addGeoJSON);
 });
 
 function addGeoJSON(encoded) {
@@ -129,6 +136,25 @@ function getFromURL(url, callback) {
         console.error(req.statusText);
     };
     req.send();
+}
+
+function getDrawn(){
+    if(!localStorage.getItem("drawn")){
+        if(!saveDrawn("[]")){
+            return false;
+        }
+    }
+    return L.geoJson(JSON.parse(localStorage.getItem("drawn")));
+}
+
+function saveDrawn(layer){
+    try{
+        localStorage.setItem("drawn", layer);
+    } catch(e){
+        console.error("LocalStorage threw an exception!");
+        return false;
+    }
+    return true;
 }
 
 function fallbackMessage(action) {
