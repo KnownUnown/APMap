@@ -8,10 +8,10 @@ $(document).ready(function() {
     // init clipboard.js
     var clipboard = new Clipboard(".btn");
 
-    $(".btn").mouseleave(function(e){
+    $(".btn").mouseleave(function(e) {
         $(this).tooltip("disable");
     });
-    clipboard.on("success", function(e){
+    clipboard.on("success", function(e) {
         $(e.trigger).tooltip({
             title: "Copied!"
         });
@@ -19,7 +19,7 @@ $(document).ready(function() {
         $(e.trigger).attr("title", "Copied!").tooltip("fixTitle").tooltip("show");
     });
 
-    clipboard.on("error", function(e){
+    clipboard.on("error", function(e) {
         $(e.trigger).tooltip("enable");
         $(e.trigger).attr("title", fallbackMessage(e.action)).tooltip("fixTitle").tooltip("show"); //TODO: fix weird tooltip positioning
     });
@@ -42,7 +42,7 @@ $(document).ready(function() {
 
     // init custom layers
 
-    if(!Storage){
+    if (!Storage) {
         console.error("LocalStorage not supported!");
         storageSupported = false;
         doodles = L.featureGroup().addTo(map);
@@ -51,12 +51,13 @@ $(document).ready(function() {
     }
     map.on('draw:created', function(e) {
         doodles.addLayer(e.layer);
-        if(storageSupported){
+        if (storageSupported) {
             saveDrawn(JSON.stringify(doodles.toGeoJSON()));
         }
     });
 
-    getFromURL("assets/" + map_revision + "/features/settlements.geojson", addGeoJSON);
+    getFromURL("assets/" + map_revision + "/features/settlements.geojson", addGeoJSON, true);
+    getFromURL("assets/" + map_revision + "/features/unaffiliated.geojson", addGeoJSON);
 
     // init controls
     L.control.coordinates({
@@ -83,7 +84,7 @@ $(document).ready(function() {
     }).addTo(map);
 });
 
-function addGeoJSON(encoded) {
+function addGeoJSON(encoded, meta = false) {
     for (var key in encoded["features"]) {
         encoded["features"][key].properties.coordinates = encoded["features"][key].geometry.coordinates;
         var latlng = map.unproject(encoded["features"][key].geometry.coordinates, map.getMaxZoom());
@@ -91,24 +92,29 @@ function addGeoJSON(encoded) {
     }
     var geoJson = L.geoJson(encoded, {
         pointToLayer: function(feature, latlng) {
-            return L.marker(latlng, {
+            var marker = L.marker(latlng, {
                 icon: L.divIcon({
                     iconSize: null,
                     className: "map-label",
                     html: feature.properties.name
                 })
-            }).on("click", function(e) {
-                $("#cityModal .modal-title").text(feature.properties.name);
-                $("#cityModal #coords").attr("value", "[" + feature.properties.coordinates.join(", ") + "]");
-                $("#lore, #source, #faction").text("Not set yet :(");
-                if (feature.properties.lore != null) {
-                    $("#faction").html(feature.properties.faction);
-                    $("#lore").html(feature.properties.lore);
-                    $("#source").html(feature.properties.source)
-                }
-                $("#cityModal").modal();
             });
+            if (meta) {
+                marker.on("click", function(e) {
+                    $("#cityModal .modal-title").text(feature.properties.name);
+                    $("#cityModal #coords").attr("value", "[" + feature.properties.coordinates.join(", ") + "]");
+                    $("#lore, #source, #faction").text("Not set yet :(");
+                    if (feature.properties.lore != null) {
+                        $("#faction").html(feature.properties.faction);
+                        $("#lore").html(feature.properties.lore);
+                        $("#source").html(feature.properties.source)
+                    }
+                    $("#cityModal").modal();
+                });
+            }
+            return marker;
         },
+
         onEachFeature: function(feature, layer) {
             var coords = "[" + feature.properties.coordinates.join(", ") + "]"; // TODO: refactor
             layer.on('mouseover', function(e) {
@@ -123,34 +129,32 @@ function addGeoJSON(encoded) {
     geoJson.addTo(map);
 }
 
-function getFromURL(url, callback) {
-    var req = new XMLHttpRequest();
-    req.overrideMimeType("application/json");
-    req.open("GET", url);
-    req.onreadystatechange = function() {
-        if (req.readyState == 4 && req.status == 200) {
-            callback(JSON.parse(req.responseText));
-        }
-    }
-    req.onerror = function() {
-        console.error(req.statusText);
-    };
-    req.send();
+function getFromURL(url, callback, hasMeta = false) { // todo: signature :(
+    $.get({
+            url: url,
+            dataType: "json"
+        })
+        .done(function(resp) {
+            callback(resp, hasMeta);
+        })
+        .fail(function(xhr, status, error) {
+            console.error(error);
+        });
 }
 
-function getDrawn(){
-    if(!localStorage.getItem("drawn")){
-        if(!saveDrawn("[]")){
+function getDrawn() {
+    if (!localStorage.getItem("drawn")) {
+        if (!saveDrawn("[]")) {
             return false;
         }
     }
     return L.geoJson(JSON.parse(localStorage.getItem("drawn")));
 }
 
-function saveDrawn(layer){
-    try{
+function saveDrawn(layer) {
+    try {
         localStorage.setItem("drawn", layer);
-    } catch(e){
+    } catch (e) {
         console.error("LocalStorage threw an exception!");
         return false;
     }
