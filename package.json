@@ -1,0 +1,30 @@
+{
+  "name": "apmap",
+  "version": "1.0.0",
+  "description": "Map for the Airship Pirates survival server.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KnownUnown/APMap.git"
+  },
+  "author": "KnownUnown",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/KnownUnown/APMap/issues"
+  },
+  "homepage": "https://github.com/KnownUnown/APMap#readme",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "clipboard": "^1.5.12",
+    "font-awesome": "^4.6.3",
+    "jquery": "^3.1.1",
+    "leaflet": "^0.7.7",
+    "leaflet-draw": "^0.3.2",
+    "leaflet-hash": "^0.2.1",
+    "leaflet.coordinates": "^0.1.5",
+    "leaflet.measurecontrol": "^1.1.0"
+  }
+}

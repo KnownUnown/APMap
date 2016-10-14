@@ -8,12 +8,14 @@
     <meta property="og:title" content="Airship Pirates Survival Map" />
     <meta property="og:image" content="favicon.ico" />
     <meta property="og:description" content="Open-source map for the Minecraft Airship Pirates Survival Server. Uses Leaflet!" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
-    <link rel="stylesheet" href="https://cdn.rawgit.com/MrMufflon/Leaflet.Coordinates/master/dist/Leaflet.Coordinates-0.1.5.css" />
-    <link rel="stylesheet" href="https://cdn.rawgit.com/Leaflet/Leaflet.draw/master/dist/leaflet.draw.css" />
-    <link rel="stylesheet" href="https://cdn.rawgit.com/makinacorpus/Leaflet.MeasureControl/gh-pages/leaflet.measurecontrol.css" />
+
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="node_modules/leaflet-draw/dist/leaflet.draw.css" />
+    <link rel="stylesheet" href="node_modules/leaflet.measurecontrol/leaflet.measurecontrol.css" />
+    <link rel="stylesheet" href="node_modules/leaflet.coordinates/dist/Leaflet.Coordinates-0.1.5.css" />
+
     <link rel="stylesheet" href="css/main.css" />
   </head>
   <body>
@@ -57,14 +59,7 @@
         </div>
       </div>
     </div>
-    <!--Javascripts!-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.10/clipboard.min.js"></script>
-    <script src="https://cdn.rawgit.com/MrMufflon/Leaflet.Coordinates/master/dist/Leaflet.Coordinates-0.1.5.min.js"></script>
-    <script src="https://cdn.rawgit.com/Leaflet/Leaflet.draw/master/dist/leaflet.draw.js"></script>
-    <script src="https://cdn.rawgit.com/makinacorpus/Leaflet.MeasureControl/gh-pages/leaflet.measurecontrol.js"></script>
-    <script src="js/main.js"></script>
+
+    <script src="js/bundle.js"></script>
   </body>
 </html>

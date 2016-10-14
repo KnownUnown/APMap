@@ -1,3 +1,18 @@
+"use strict";
+
+global.jQuery = global.$ = require("jquery"); // workaround for weird browserify bugs
+require("bootstrap");
+
+var L = require("leaflet");
+var Clipboard = require("clipboard");
+
+L.Icon.Default.imagePath = "node_modules/leaflet/dist/images/"; // fix incorrect icons
+
+require("leaflet-draw");
+require("leaflet.measurecontrol");
+require("leaflet.coordinates/dist/Leaflet.Coordinates-0.1.5.min.js");
+require("leaflet-hash");
+
 var map = null;
 var map_revision = "r6";
 
@@ -29,6 +44,8 @@ $(document).ready(function() {
         measureControl: true
     }).setView([0, 0], 1);
 
+    var hash = new L.Hash(map);
+
     // init base tile layer
     L.tileLayer("assets/{revision}/map/{z}/{x}/{y}.png", {
         revision: map_revision,
@@ -41,7 +58,6 @@ $(document).ready(function() {
     }).addTo(map);
 
     // init custom layers
-
     if (!Storage) {
         console.error("LocalStorage not supported!");
         storageSupported = false;
@@ -64,8 +80,8 @@ $(document).ready(function() {
         position: "bottomleft",
         enableUserInput: false,
         customLabelFcn: function(latlng, opt) {
-            xy = map.project(latlng, map.getMaxZoom());
-            return "X: " + Math.round(xy.x) + " Y: " + Math.round(xy.y);
+            var coords = map.project(latlng, map.getMaxZoom());
+            return "X: " + Math.round(coords.x) + " Y: " + Math.round(coords.y);
         }
     }).addTo(map);
 
