@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet.MeasureControl</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css">
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="leaflet-draw/dist/leaflet.draw.css" />
+    <link rel="stylesheet" href="leaflet.measurecontrol.css" />
+    <script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
+    <script src="leaflet-draw/dist/leaflet.draw.js"></script>
+
+    <script src="https://unpkg.com/leaflet.measurecontrol@1.0.0"></script>
+    <style>
+
+    </style>
+</head>
+<body>
+    <header>
+      <h1>A control to mesure distances</h1>
+      <div class="menu">
+        <a class="sources" href="http://github.com/makinacorpus/Leaflet.MeasureControl/">Sources</a>
+        <a class="logo" href="http://makina-corpus.com"><img class="icon" src="http://depot.makina-corpus.org/public/logo.gif"/></a>
+      </div>
+    </header>
+    <main>
+      <div id="map"></div>
+    </main>
+
+    <script type="text/javascript">
+
+        var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; 2013 OpenStreetMap contributors',
+        });
+
+        var map = L.map('map')
+                   .setView([48.49, 1.4], 16)
+                   .addLayer(osm);
+
+        L.Control.measureControl().addTo(map);
+    </script>
+</body>
+</html>
