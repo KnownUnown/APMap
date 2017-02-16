@@ -1,3 +1,4 @@
 .DS_Store
 .tern-project
 .stubs/
+node_modules/
