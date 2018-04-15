@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AP Survival Map</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta property="og:title" content="Airship Pirates Survival Map" />
+    <meta property="og:image" content="favicon.ico" />
+    <meta property="og:description" content="Open-source map for the Minecraft Airship Pirates Survival Server. Uses Leaflet!" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <div id="map"></div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="cityModal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="input-group input-group-sm" style="float: right; width: 40%;">
+              <input type="text" class="form-control" id="coords" />
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button" data-clipboard-target="#coords">
+                  <i class="fas fa-clipboard"></i>
+                </button>
+              </span>
+            </div>
+            <h4 class="modal-title"></h4>
+          </div>
+          <div class="modal-body row">
+            <div class="col-md-8">
+              <table>
+                <tr>
+                  <td><i class="fas fa-flag"></i></td>
+                  <td><p id="faction"></p></td>
+                </tr>
+                <tr>
+                  <td><i class="fas fa-bars"></i></td>
+                  <td><span id="lore"></span></td>
+                </tr>
+                <tr>
+                  <td><i class="fas fa-plane"></i></td>
+                  <td><span id="source"></span></td>
+                </tr>
+              </table>
+            </div>
+            <div class="col-md-4" style="padding: 50px 50px 50px 50px;">
+              There should be an image here, but it's not implemented yet. :(
+            </div>
+          </div>
+          <div class="modal-footer">
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="bundle.js"></script>
+  </body>
+</html>

@@ -1,17 +1,11 @@
 "use strict";
 
-global.jQuery = global.$ = require("jquery"); // workaround for weird browserify bugs
-require("bootstrap");
+import "leaflet/dist/leaflet.css";
+import "leaflet-draw/dist/leaflet.draw.css";
 
-var L = require("leaflet");
-var Clipboard = require("clipboard");
-
-L.Icon.Default.imagePath = "node_modules/leaflet/dist/images/"; // fix incorrect icons
-
-require("leaflet-draw");
-require("leaflet.measurecontrol");
-require("leaflet.coordinates/dist/Leaflet.Coordinates-0.1.5.min.js");
-require("leaflet-hash");
+import L from "leaflet";
+import "leaflet-draw";
+import Clipboard from "clipboard";
 
 var map = null;
 var map_revision = "r6";
@@ -40,11 +34,7 @@ $(document).ready(function() {
     });
 
     // init map elements
-    map = L.map("map", {
-        measureControl: true
-    }).setView([0, 0], 1);
-
-    var hash = new L.Hash(map);
+    map = L.map("map").setView([0, 0], 1);
 
     // init base tile layer
     L.tileLayer("assets/{revision}/map/{z}/{x}/{y}.png", {
@@ -74,16 +64,6 @@ $(document).ready(function() {
 
     getFromURL("assets/" + map_revision + "/features/settlements.geojson", addGeoJSON, true);
     getFromURL("assets/" + map_revision + "/features/unaffiliated.geojson", addGeoJSON);
-
-    // init controls
-    L.control.coordinates({
-        position: "bottomleft",
-        enableUserInput: false,
-        customLabelFcn: function(latlng, opt) {
-            var coords = map.project(latlng, map.getMaxZoom());
-            return "X: " + Math.round(coords.x) + " Y: " + Math.round(coords.y);
-        }
-    }).addTo(map);
 
     new L.Control.Draw({
         edit: {
@@ -117,6 +97,7 @@ function addGeoJSON(encoded, meta = false) {
             });
             if (meta) {
                 marker.on("click", function(e) {
+                    console.log(feature.properties);
                     $("#cityModal .modal-title").text(feature.properties.name);
                     $("#cityModal #coords").attr("value", "[" + feature.properties.coordinates.join(", ") + "]");
                     $("#lore, #source, #faction").text("Not set yet :(");
