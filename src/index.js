@@ -8,7 +8,7 @@ import "leaflet-draw";
 import Clipboard from "clipboard";
 
 var map = null;
-var map_revision = "r6";
+var map_revision = "r8";
 
 var doodles = null;
 var storageSupported = true;
@@ -34,18 +34,28 @@ $(document).ready(function() {
     });
 
     // init map elements
-    map = L.map("map").setView([0, 0], 1);
+    map = L.map("map", {
+        crs: L.CRS.Simple
+    }).setView([0, 0], 1);
+
+    L.theMap = map;
 
     // init base tile layer
     L.tileLayer("assets/{revision}/map/{z}/{x}/{y}.png", {
         revision: map_revision,
         attribution: "Map data courtesy of <a href=\"http://minecraftairshippirates.enjin.com/profile/1310042\">Miss Fortune</a>",
-        minZoom: 1,
+        minZoom: 0,
         maxZoom: 6,
-        tms: true,
-        continuousWorld: true,
-        crs: L.CRS.Simple
+        continuousWorld: true
+        /*
+        bounds: L.latLngBounds(
+            L.latLng(0, -12288),
+            L.latLng(12288, 0)
+        )
+*/
     }).addTo(map);
+
+    L.Control.coordinates({position: "bottomleft"}).addTo(map);
 
     // init custom layers
     if (!Storage) {
