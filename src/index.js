@@ -13,6 +13,9 @@ var map_revision = "r8";
 var doodles = null;
 var storageSupported = true;
 
+const url_tmpl_base = "assets/{revision}/map/{z}/{x}/{y}.png";
+const url_gh_base = "https://github.com/KnownUnown/APMap/tree/master/docs/";
+
 $(document).ready(function() {
     // init clipboard.js
     var clipboard = new Clipboard(".btn");
@@ -41,7 +44,7 @@ $(document).ready(function() {
     L.theMap = map;
 
     // init base tile layer
-    L.tileLayer("assets/{revision}/map/{z}/{x}/{y}.png", {
+    L.tileLayer(url_gh_base + url_tmpl_base + "?raw=true", {
         revision: map_revision,
         attribution: "Map data courtesy of <a href=\"http://minecraftairshippirates.enjin.com/profile/1310042\">Miss Fortune</a>",
         minZoom: 0,
@@ -54,8 +57,6 @@ $(document).ready(function() {
         )
 */
     }).addTo(map);
-
-    L.Control.coordinates({position: "bottomleft"}).addTo(map);
 
     // init custom layers
     if (!Storage) {
