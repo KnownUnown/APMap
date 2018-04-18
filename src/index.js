@@ -13,6 +13,8 @@ var map_revision = "r8";
 var doodles = null;
 var storageSupported = true;
 
+const data_url = "https://apmap-tile-server.unown.me/";
+
 $(document).ready(function() {
     // init clipboard.js
     var clipboard = new Clipboard(".btn");
@@ -41,7 +43,7 @@ $(document).ready(function() {
     L.theMap = map;
 
     // init base tile layer
-    L.tileLayer("https://apmap-tile-server.unown.me/{revision}/map/{z}/{x}/{y}.png", {
+    L.tileLayer(data_url + "{revision}/map/{z}/{x}/{y}.png", {
         revision: map_revision,
         attribution: "Map data courtesy of <a href=\"http://minecraftairshippirates.enjin.com/profile/1310042\">Miss Fortune</a>",
         minZoom: 0,
@@ -70,8 +72,10 @@ $(document).ready(function() {
         }
     });
 
-    getFromURL("assets/" + map_revision + "/features/settlements.geojson", addGeoJSON, true);
-    getFromURL("assets/" + map_revision + "/features/unaffiliated.geojson", addGeoJSON);
+    getFromURL(data_url + "assets/" + map_revision
+               + "/features/settlements.geojson", addGeoJSON, true);
+    getFromURL(data_url + "assets/" + map_revision
+               + "/features/unaffiliated.geojson", addGeoJSON);
 
     new L.Control.Draw({
         edit: {
