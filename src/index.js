@@ -72,9 +72,9 @@ $(document).ready(function() {
         }
     });
 
-    getFromURL(data_url + "assets/" + map_revision
+    getFromURL(data_url + map_revision
                + "/features/settlements.geojson", addGeoJSON, true);
-    getFromURL(data_url + "assets/" + map_revision
+    getFromURL(data_url + map_revision
                + "/features/unaffiliated.geojson", addGeoJSON);
 
     new L.Control.Draw({
