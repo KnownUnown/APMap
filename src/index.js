@@ -7,6 +7,8 @@ import L from "leaflet";
 import "leaflet-draw";
 import Clipboard from "clipboard";
 
+import "./ap-crs";
+
 var map = null;
 var map_revision = "r8";
 
@@ -35,12 +37,16 @@ $(document).ready(function() {
         $(e.trigger).attr("title", fallbackMessage(e.action)).tooltip("fixTitle").tooltip("show"); //TODO: fix weird tooltip positioning
     });
 
+    var bounds = L.latLngBounds(
+        L.latLng(0, 0),
+        L.latLng(-12288, 12288)
+    );
     // init map elements
     map = L.map("map", {
-        crs: L.CRS.Simple
-    }).setView([0, 0], 1);
-
-    L.theMap = map;
+        crs: L.CRS.AirshipPirates
+    });
+    window.ap_map = map; // useful for debugging
+    map.fitBounds(bounds);
 
     // init base tile layer
     L.tileLayer(data_url + "{revision}/map/{z}/{x}/{y}.png", {
@@ -48,13 +54,8 @@ $(document).ready(function() {
         attribution: "Map data courtesy of <a href=\"http://minecraftairshippirates.enjin.com/profile/1310042\">Miss Fortune</a>",
         minZoom: 0,
         maxZoom: 6,
+        bounds: bounds,
         continuousWorld: true
-        /*
-        bounds: L.latLngBounds(
-            L.latLng(0, -12288),
-            L.latLng(12288, 0)
-        )
-*/
     }).addTo(map);
 
     // init custom layers
@@ -71,6 +72,7 @@ $(document).ready(function() {
             saveDrawn(JSON.stringify(doodles.toGeoJSON()));
         }
     });
+
 
     getFromURL(data_url + map_revision
                + "/features/settlements.geojson", addGeoJSON, true);
