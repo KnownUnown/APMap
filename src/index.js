@@ -8,6 +8,7 @@ import "leaflet-draw";
 import Clipboard from "clipboard";
 
 import "./ap-crs";
+import "./marker-icon-hack";
 
 var map = null;
 var map_revision = "r8";
