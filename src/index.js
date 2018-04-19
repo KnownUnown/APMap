@@ -80,6 +80,8 @@ $(document).ready(function() {
             }
         },
         draw: {
+            circle: false,       // GeoJSON doesn't support circles (yet)
+            circlemarker: false, // ^
             polygon: {
                 allowIntersection: false
             }
