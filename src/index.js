@@ -66,13 +66,6 @@ $(document).ready(function() {
     } else {
         doodles = getDrawn().addTo(map);
     }
-    map.on('draw:created', function(e) {
-        doodles.addLayer(e.layer);
-        if (storageSupported) {
-            saveDrawn(JSON.stringify(doodles.toGeoJSON()));
-        }
-    });
-
 
     getFromURL(data_url + map_revision
                + "/features/settlements.geojson", addGeoJSON, true);
@@ -92,6 +85,19 @@ $(document).ready(function() {
             }
         }
     }).addTo(map);
+
+    map.on(L.Draw.Event.CREATED, function(e) {
+        doodles.addLayer(e.layer);
+        if (storageSupported) {
+            saveDrawn(JSON.stringify(doodles.toGeoJSON()));
+        }
+    });
+    map.on(L.Draw.Event.EDITED, function(e) {
+        saveDrawn(JSON.stringify(doodles.toGeoJSON()));
+    });
+    map.on(L.Draw.Event.DELETED, function(e) {
+        saveDrawn(JSON.stringify(doodles.toGeoJSON()));
+    });
 });
 
 function addGeoJSON(encoded, meta = false) {
