@@ -74,17 +74,11 @@ $(document).ready(function() {
 
     new L.Control.Draw({
         edit: {
-            featureGroup: doodles,
-            poly: {
-                allowIntersection: false
-            }
+            featureGroup: doodles
         },
         draw: {
             circle: false,       // GeoJSON doesn't support circles (yet)
-            circlemarker: false, // ^
-            polygon: {
-                allowIntersection: false
-            }
+            circlemarker: false  // ^
         }
     }).addTo(map);
 
